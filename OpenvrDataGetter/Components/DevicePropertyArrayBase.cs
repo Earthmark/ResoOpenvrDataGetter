@@ -1,5 +1,5 @@
-﻿using FrooxEngine.ProtoFlux;
-using FrooxEngine;
+﻿using FrooxEngine;
+using FrooxEngine.ProtoFlux;
 using System;
 
 namespace OpenvrDataGetter.Components;
@@ -23,5 +23,23 @@ public abstract class DevicePropertyArrayBase<T, P, R> : DeviceProperty<R, P> wh
             5 => ArrIndex,
             _ => base.GetSyncMember(index),
         };
+    }
+
+    protected override ISyncRef GetInputInternal(ref int index)
+    {
+        ISyncRef inputInternal = base.GetInputInternal(ref index);
+        if (inputInternal != null)
+        {
+            return inputInternal;
+        }
+
+        switch (index)
+        {
+            case 0:
+                return ArrIndex;
+            default:
+                index -= 1;
+                return null;
+        }
     }
 }

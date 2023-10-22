@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Runtimes.Execution;
+﻿using ProtoFlux.Core;
+using ProtoFlux.Runtimes.Execution;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
+[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyBool")]
 public class DevicePropertyBool : DeviceProperty<bool, BoolDeviceProperty>
 {
     protected override bool Compute(ExecutionContext context)

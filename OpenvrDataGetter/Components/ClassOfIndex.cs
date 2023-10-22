@@ -1,12 +1,12 @@
 ﻿using FrooxEngine;
 using ProtoFlux.Core;
-using ProtoFlux.Runtimes.Execution;
 using System;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Components;
 
-[Grouping("Add-Ons.OpenvrDataGetter")]
+[Grouping("Ad-Ons.ClassOfIndex")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/ClassOfIndex" })]
 public class ClassOfIndex : TrackedDeviceData<ETrackedDeviceClass>
 {
     public static ClassOfIndex __New()

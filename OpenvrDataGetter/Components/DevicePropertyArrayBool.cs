@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.DevicePropertyArrayBool")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/DevicePropertyArrayBool" })]
 public class DevicePropertyArrayBool : DevicePropertyArrayBase<byte, BoolArrayDeviceProperty, bool>
 {
     public static DevicePropertyArrayBool __New()

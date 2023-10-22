@@ -1,9 +1,12 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.RoleOfIndex")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/RoleOfIndex" })]
 public class RoleOfIndex : TrackedDeviceData<ETrackedControllerRole>
 {
     public static RoleOfIndex __New()

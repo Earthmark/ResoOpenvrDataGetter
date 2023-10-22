@@ -5,6 +5,8 @@ using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
+[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyString")]
 public class DevicePropertyString : ObjectFunctionNode<ExecutionContext, string>
 {
     public ValueArgument<uint> Index;

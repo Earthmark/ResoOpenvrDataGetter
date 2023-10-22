@@ -6,7 +6,6 @@
     <Nullable>disable</Nullable>
     <Version>0.2.0</Version>
     <CopyToMods Condition="'$(CopyToMods)'==''">true</CopyToMods>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,8 +31,10 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\ProtoFlux.Nodes.FrooxEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetDir)\$(TargetName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\&quot;" />
-  </Target>
+  
+  <PropertyGroup>
+    <PostBuildEvent>echo "$(TargetPath)"
+copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\"</PostBuildEvent>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
 </Project>

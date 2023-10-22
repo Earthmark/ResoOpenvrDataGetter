@@ -1,34 +1,49 @@
-﻿using FrooxEngine.ProtoFlux;
-using FrooxEngine;
-using ProtoFlux.Core;
+﻿using FrooxEngine;
+using FrooxEngine.ProtoFlux;
 using ProtoFlux.Runtimes.Execution;
 using System;
 
-namespace OpenvrDataGetter.Components
+namespace OpenvrDataGetter.Components;
+
+public abstract class TrackedDeviceData<T> : FrooxEngine.ProtoFlux.Runtimes.Execution.ValueFunctionNode<ExecutionContext, T> where T : unmanaged
 {
-    [NodeCategory("Add-Ons.OpenvrDataGetter")]
-    public abstract class TrackedDeviceData<T> : FrooxEngine.ProtoFlux.Runtimes.Execution.ValueFunctionNode<ExecutionContext, T> where T : unmanaged
+    public SyncRef<INodeValueOutput<uint>> Index;
+
+    public override int NodeInputCount => base.NodeInputCount + 1;
+
+    protected override void InitializeSyncMembers()
     {
-        public SyncRef<INodeValueOutput<uint>> Index;
+        base.InitializeSyncMembers();
+        Index = new SyncRef<INodeValueOutput<uint>>();
+    }
 
-        public override int NodeInputCount => base.NodeInputCount + 1;
-
-        protected override void InitializeSyncMembers()
+    protected override ISyncRef GetInputInternal(ref int index)
+    {
+        ISyncRef inputInternal = base.GetInputInternal(ref index);
+        if (inputInternal != null)
         {
-            base.InitializeSyncMembers();
-            Index = new SyncRef<INodeValueOutput<uint>>();
+            return inputInternal;
         }
 
-        public override ISyncMember GetSyncMember(int index)
+        switch (index)
         {
-            return index switch
-            {
-                0 => persistent,
-                1 => updateOrder,
-                2 => EnabledField,
-                3 => Index,
-                _ => throw new ArgumentOutOfRangeException(),
-            };
+            case 0:
+                return Index;
+            default:
+                index -= 1;
+                return null;
         }
+    }
+
+    public override ISyncMember GetSyncMember(int index)
+    {
+        return index switch
+        {
+            0 => persistent,
+            1 => updateOrder,
+            2 => EnabledField,
+            3 => Index,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
 }

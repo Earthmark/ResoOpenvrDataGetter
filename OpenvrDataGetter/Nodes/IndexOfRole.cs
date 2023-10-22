@@ -5,6 +5,7 @@ using Valve.VR;
 namespace OpenvrDataGetter.Nodes;
 
 [NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.IndexOfRole")]
 public class IndexOfRole : ValueFunctionNode<ExecutionContext, uint>
 {
     public ValueArgument<ETrackedControllerRole> Role;

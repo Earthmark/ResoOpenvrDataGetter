@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.DevicePropertyInt")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/DevicePropertyInt" })]
 public class DevicePropertyInt : DeviceProperty<int, IntDeviceProperty>
 {
     public static DevicePropertyInt __New()

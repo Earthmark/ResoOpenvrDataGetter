@@ -1,13 +1,14 @@
-﻿using FrooxEngine.ProtoFlux;
-using FrooxEngine;
+﻿using FrooxEngine;
+using FrooxEngine.ProtoFlux;
 using ProtoFlux.Core;
-using Valve.VR;
 using ProtoFlux.Runtimes.Execution;
 using System;
+using Valve.VR;
 
 namespace OpenvrDataGetter.Components;
 
-[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[Grouping("Ad-Ons.IndexOfRole")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/IndexOfRole" })]
 public class IndexOfRole : FrooxEngine.ProtoFlux.Runtimes.Execution.ValueFunctionNode<ExecutionContext, uint>
 {
     public static IndexOfRole __New()
@@ -37,6 +38,24 @@ public class IndexOfRole : FrooxEngine.ProtoFlux.Runtimes.Execution.ValueFunctio
             3 => Role,
             _ => throw new ArgumentOutOfRangeException(),
         };
+    }
+
+    protected override ISyncRef GetInputInternal(ref int index)
+    {
+        ISyncRef inputInternal = base.GetInputInternal(ref index);
+        if (inputInternal != null)
+        {
+            return inputInternal;
+        }
+
+        switch (index)
+        {
+            case 0:
+                return Role;
+            default:
+                index -= 1;
+                return null;
+        }
     }
 
     public Nodes.IndexOfRole TypedNodeInstance { get; private set; }

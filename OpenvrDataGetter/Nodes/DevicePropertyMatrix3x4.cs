@@ -1,9 +1,12 @@
 ﻿using Elements.Core;
+using ProtoFlux.Core;
 using ProtoFlux.Runtimes.Execution;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
+[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyMatrix3x4")]
 public class DevicePropertyMatrix3x4 : DeviceProperty<float4x4, Matrix3x4DeviceProperty>
 {
     protected override float4x4 Compute(ExecutionContext context)

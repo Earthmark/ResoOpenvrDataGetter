@@ -5,8 +5,8 @@ using Valve.VR;
 
 namespace OpenvrDataGetter.Components;
 
-[Grouping("Core.Operators.Add")]
-[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Operators" })]
+[Grouping("Ad-Ons.ActivityLevelOfIndexNode")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/ActivityLevelOfIndexNode" })]
 public class ActivityLevelOfIndexNode : TrackedDeviceData<EDeviceActivityLevel>
 {
     public static ActivityLevelOfIndexNode __New()

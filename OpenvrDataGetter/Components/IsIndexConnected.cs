@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.IsIndexConnected")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/IsIndexConnected" })]
 public class IsIndexConnected : TrackedDeviceData<bool>
 {
     public static IsIndexConnected __New()

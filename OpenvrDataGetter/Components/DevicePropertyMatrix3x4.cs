@@ -1,9 +1,12 @@
 ﻿using Elements.Core;
+using FrooxEngine;
 using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.DevicePropertyMatrix3x4")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/DevicePropertyMatrix3x4" })]
 public class DevicePropertyMatrix3x4 : DeviceProperty<float4x4, Matrix3x4DeviceProperty>
 {
     public static DevicePropertyMatrix3x4 __New()

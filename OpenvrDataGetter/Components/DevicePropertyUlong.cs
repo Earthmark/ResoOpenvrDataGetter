@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.DevicePropertyUlong")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/DevicePropertyUlong" })]
 public class DevicePropertyUlong : DeviceProperty<ulong, UlongDeviceProperty>
 {
     public static DevicePropertyUlong __New()

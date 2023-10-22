@@ -1,11 +1,11 @@
-﻿using FrooxEngine;
-using FrooxEngine.ProtoFlux.Runtimes.Execution.Nodes.Operators;
+﻿using ProtoFlux.Core;
 using ProtoFlux.Runtimes.Execution;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
-[Grouping("Add-Ons.OpenvrDataGetter")]
+[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.ClassOfIndex")]
 public class ClassOfIndex : TrackedDeviceData<ETrackedDeviceClass>
 {
     protected override ETrackedDeviceClass Compute(ExecutionContext context)

@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Runtimes.Execution;
+﻿using ProtoFlux.Core;
+using ProtoFlux.Runtimes.Execution;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
+[NodeCategory("Add-Ons.OpenvrDataGetter")]
+[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyUlong")]
 public class DevicePropertyUlong : DeviceProperty<ulong, UlongDeviceProperty>
 {
     protected override ulong Compute(ExecutionContext context)

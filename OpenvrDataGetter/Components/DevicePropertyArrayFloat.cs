@@ -1,8 +1,11 @@
-﻿using ProtoFlux.Core;
+﻿using FrooxEngine;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
+[Grouping("Ad-Ons.DevicePropertyArrayFloat")]
+[Category(new string[] { "ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons/DevicePropertyArrayFloat" })]
 public class DevicePropertyArrayFloat : DevicePropertyArray<float, FloatArrayDeviceProperty>
 {
     public static DevicePropertyArrayFloat __New()
