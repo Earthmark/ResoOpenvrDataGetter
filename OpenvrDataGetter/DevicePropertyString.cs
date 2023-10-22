@@ -1,28 +1,7 @@
-﻿using System.Text;
-using Valve.VR;
+﻿using Valve.VR;
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyString : DeviceProperty<string, StringDeviceProperty>
-    {
-        public override string Content
-        {
-            get
-            {
-                uint index = Index.Evaluate();
-                ETrackedDeviceProperty property = (ETrackedDeviceProperty)Prop.Evaluate();
-                ETrackedPropertyError pError = ETrackedPropertyError.TrackedProp_Success;
-                StringBuilder stringBuilder = new StringBuilder(64);
-                uint stringTrackedDeviceProperty = OpenVR.System.GetStringTrackedDeviceProperty(index, property, null, 0u, ref pError);
-                if (stringTrackedDeviceProperty > 1)
-                {
-                    stringBuilder = new StringBuilder((int)stringTrackedDeviceProperty);
-                    OpenVR.System.GetStringTrackedDeviceProperty(index, property, stringBuilder, stringTrackedDeviceProperty, ref pError);
-                }
-                return stringBuilder.ToString();
-            }
-        }
-    }
     public enum StringDeviceProperty
     {
         Prop_TrackingSystemName = ETrackedDeviceProperty.Prop_TrackingSystemName_String,

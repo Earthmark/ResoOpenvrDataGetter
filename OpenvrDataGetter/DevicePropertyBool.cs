@@ -2,17 +2,6 @@
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyBool : DeviceProperty<bool, BoolDeviceProperty>
-    {
-        public override bool Content
-        {
-            get
-            {
-                ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-                return OpenVR.System.GetBoolTrackedDeviceProperty(Index.Evaluate(), (ETrackedDeviceProperty)Prop.Evaluate(), ref error);
-            }
-        }
-    }
     public enum BoolDeviceProperty
     {
         Prop_WillDriftInYaw = ETrackedDeviceProperty.Prop_WillDriftInYaw_Bool,

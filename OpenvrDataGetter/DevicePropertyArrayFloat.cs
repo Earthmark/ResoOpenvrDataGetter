@@ -2,10 +2,6 @@
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyArrayFloat : DevicePropertyArray<float, FloatArrayDeviceProperty>
-    {
-    }
-
     public enum FloatArrayDeviceProperty
     {
         Prop_CameraDistortionCoefficients = ETrackedDeviceProperty.Prop_CameraDistortionCoefficients_Float_Array,

@@ -2,17 +2,6 @@
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyFloat : DeviceProperty<float, FloatDeviceProperty>
-    {
-        public override float Content
-        {
-            get
-            {
-                ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-                return OpenVR.System.GetFloatTrackedDeviceProperty(Index.Evaluate(), (ETrackedDeviceProperty)Prop.Evaluate(), ref error);
-            }
-        }
-    }
     public enum FloatDeviceProperty
     {
         Prop_DeviceBatteryPercentage = ETrackedDeviceProperty.Prop_DeviceBatteryPercentage_Float,

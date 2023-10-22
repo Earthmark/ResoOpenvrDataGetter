@@ -1,30 +1,36 @@
-﻿using FrooxEngine.LogiX;
+﻿/*
+using Elements.Core;
 using FrooxEngine;
-using BaseX;
-using Valve.VR;
-using System.Threading;
+using FrooxEngine.ProtoFlux;
+using FrooxEngine.ProtoFlux.Runtimes.Execution;
+using ProtoFlux.Core;
 using System;
+using System.Threading;
+using Valve.VR;
 
-namespace OpenvrDataGetter
+namespace OpenvrDataGetter.Nodes
 {
-
     [Category(new string[] { "LogiX/Add-Ons/OpenvrDataGetter" })]
-    public class ImuReader : LogixNode, IDisposable
+    public class ImuReader : VoidNode<FrooxEngineContext>, IDisposable
     {
-        public readonly Input<string> DevicePath;
-        public readonly Impulse OnOpened;
-        public readonly Impulse OnClosed;
-        public readonly Output<bool> isOpened;
-        public readonly Impulse OnFail;
-        public readonly Output<ErrorCode> FailReason;
-        public readonly Impulse OnData;
-        public readonly Output<double> fSampleTime;
-        public readonly Output<double3> vAccel;
-        public readonly Output<double3> vGyro;
-        public readonly Output<Imu_OffScaleFlags> unOffScaleFlags;
+        public ObjectArgument<string> DevicePath;
+        public readonly SyncRef<ISyncNodeOperation> OnOpened;
+        public readonly SyncRef<ISyncNodeOperation> OnClosed;
+        public readonly ValueOutput<bool> isOpened;
+        public readonly SyncRef<ISyncNodeOperation> OnFail;
+        public readonly ValueOutput<ErrorCode> FailReason;
+        public readonly SyncRef<ISyncNodeOperation> OnData;
+        public readonly ValueOutput<double> fSampleTime;
+        public readonly ValueOutput<double3> vAccel;
+        public readonly ValueOutput<double3> vGyro;
+        public readonly ValueOutput<Imu_OffScaleFlags> unOffScaleFlags;
 
         ulong pulBuffer = 0;
         Thread thread = null;
+
+        public ImuReader()
+        {
+        }
 
         protected override void OnAwake()
         {
@@ -40,7 +46,7 @@ namespace OpenvrDataGetter
                 Fail(ErrorCode.PathIsNullOrEmpty);
                 return;
             }
-            if(OpenVR.IOBuffer == null)
+            if (OpenVR.IOBuffer == null)
             {
                 Fail(ErrorCode.OpenVrNotFound);
                 return;
@@ -62,7 +68,7 @@ namespace OpenvrDataGetter
                     thread = new Thread(readLoop);
                     thread.Start();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     UniLog.Log(e);
                     Fail(ErrorCode.UnknownException);
@@ -119,9 +125,9 @@ namespace OpenvrDataGetter
                     uint punRead = new();
                     unsafe
                     {
-                        fixed (ImuSample_t* pSamples = samples) 
+                        fixed (ImuSample_t* pSamples = samples)
                         {
-                            failReason = OpenVR.IOBuffer.Read(pulBuffer, (IntPtr)pSamples, (uint)sizeof(ImuSample_t) * arraySize, ref punRead); 
+                            failReason = OpenVR.IOBuffer.Read(pulBuffer, (IntPtr)pSamples, (uint)sizeof(ImuSample_t) * arraySize, ref punRead);
                         }
                     }
                     if (failReason != EIOBufferError.IOBuffer_Success)
@@ -151,7 +157,7 @@ namespace OpenvrDataGetter
                             unOffScaleFlags.Value = 0;
                         });
                     }
-                    if(unreadSize == 0) Thread.Sleep(10);
+                    if (unreadSize == 0) Thread.Sleep(10);
                 }
             }
             catch (Exception e)
@@ -168,7 +174,7 @@ namespace OpenvrDataGetter
                 pulBuffer = 0;
             }
         }
-        
+
         void IDisposable.Dispose()
         {
             if (thread != null)
@@ -206,3 +212,4 @@ namespace OpenvrDataGetter
         }
     }
 }
+*/

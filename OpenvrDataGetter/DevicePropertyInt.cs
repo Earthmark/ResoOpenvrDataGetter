@@ -2,17 +2,6 @@
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyInt : DeviceProperty<int, IntDeviceProperty>
-    {
-        public override int Content
-        {
-            get
-            {
-                ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-                return OpenVR.System.GetInt32TrackedDeviceProperty(Index.Evaluate(), (ETrackedDeviceProperty)Prop.Evaluate(), ref error);
-            }
-        }
-    }
     public enum IntDeviceProperty
     {
         Prop_DeviceClass = ETrackedDeviceProperty.Prop_DeviceClass_Int32,

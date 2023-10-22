@@ -2,17 +2,6 @@
 
 namespace OpenvrDataGetter
 {
-    public class DevicePropertyUlong : DeviceProperty<ulong, UlongDeviceProperty>
-    {
-        public override ulong Content
-        {
-            get
-            {
-                ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-                return OpenVR.System.GetUint64TrackedDeviceProperty(Index.Evaluate(), (ETrackedDeviceProperty)Prop.Evaluate(), ref error);
-            }
-        }
-    }
     public enum UlongDeviceProperty
     {
         Prop_HardwareRevision = ETrackedDeviceProperty.Prop_HardwareRevision_Uint64,
