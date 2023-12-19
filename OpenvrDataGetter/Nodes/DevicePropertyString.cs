@@ -5,17 +5,15 @@ using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
-[NodeCategory("Add-Ons.OpenvrDataGetter")]
-[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyString")]
 public class DevicePropertyString : ObjectFunctionNode<ExecutionContext, string>
 {
-    public ValueArgument<uint> Index;
-    public ValueArgument<StringDeviceProperty> Prop;
+    public ValueInput<uint> Index;
+    public ValueInput<StringDeviceProperty> Prop;
 
     protected override string Compute(ExecutionContext context)
     {
-        uint index = 0.ReadValue<uint>(context);
-        ETrackedDeviceProperty property = (ETrackedDeviceProperty)1.ReadValue<StringDeviceProperty>(context);
+        uint index = Index.Evaluate(context);
+        ETrackedDeviceProperty property = (ETrackedDeviceProperty)Prop.Evaluate(context);
         ETrackedPropertyError pError = ETrackedPropertyError.TrackedProp_Success;
         StringBuilder stringBuilder = new(64);
         uint stringTrackedDeviceProperty = OpenVR.System.GetStringTrackedDeviceProperty(index, property, null, 0u, ref pError);

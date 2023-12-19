@@ -1,29 +1,15 @@
 ﻿using FrooxEngine;
 using FrooxEngine.ProtoFlux;
+using ProtoFlux.Core;
 using System;
 
 namespace OpenvrDataGetter.Components;
 
-public abstract class DeviceProperty<T, P> : TrackedDeviceData<T> where T : unmanaged where P : unmanaged, Enum
+public abstract class DeviceProperty<T, P, TNode> : TrackedDeviceData<T, TNode> where T : unmanaged where P : unmanaged, Enum where TNode : class, INode, new()
 {
-    public SyncRef<INodeValueOutput<P>> Prop;
+    public readonly SyncRef<INodeValueOutput<P>> Prop;
 
     public override int NodeInputCount => base.NodeInputCount + 1;
-
-    protected override void InitializeSyncMembers()
-    {
-        base.InitializeSyncMembers();
-        Prop = new SyncRef<INodeValueOutput<P>>();
-    }
-
-    public override ISyncMember GetSyncMember(int index)
-    {
-        return index switch
-        {
-            4 => Prop,
-            _ => base.GetSyncMember(index),
-        };
-    }
 
     protected override ISyncRef GetInputInternal(ref int index)
     {

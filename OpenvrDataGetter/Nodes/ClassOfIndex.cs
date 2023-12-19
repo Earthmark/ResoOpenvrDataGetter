@@ -4,13 +4,14 @@ using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
-[NodeCategory("Add-Ons.OpenvrDataGetter")]
-[NodeOverload("Add-Ons.OpenvrDataGetter.ClassOfIndex")]
-public class ClassOfIndex : TrackedDeviceData<ETrackedDeviceClass>
+public class ClassOfIndex : ValueFunctionNode<ExecutionContext, ETrackedDeviceClass>
 {
+    public ValueInput<uint> Index;
+    public ValueInput<ETrackedDeviceClass> Prop;
+
     protected override ETrackedDeviceClass Compute(ExecutionContext context)
     {
-        uint index = IndexCompute(context);
+        uint index = Index.Evaluate(context);
         return OpenVR.System.GetTrackedDeviceClass(index);
     }
 }

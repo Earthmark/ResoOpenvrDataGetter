@@ -1,215 +1,130 @@
-﻿/*
-using Elements.Core;
+﻿using Elements.Core;
 using FrooxEngine;
 using FrooxEngine.ProtoFlux;
 using FrooxEngine.ProtoFlux.Runtimes.Execution;
 using ProtoFlux.Core;
 using System;
-using System.Threading;
 using Valve.VR;
 
-namespace OpenvrDataGetter.Components
+namespace OpenvrDataGetter.Components;
+
+[Category("ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons")]
+public class ImuReader : VoidNode<FrooxEngineContext>
 {
-    [Category(new string[] { "LogiX/Add-Ons/OpenvrDataGetter" })]
-    public class ImuReader : VoidNode<FrooxEngineContext>, IDisposable
+    public readonly SyncRef<INodeObjectOutput<string>> DevicePath;
+
+    public readonly SyncNodeOperation Open;
+    public readonly SyncNodeOperation Close;
+
+    public readonly SyncRef<INodeOperation> OnOpened;
+    public readonly SyncRef<INodeOperation> OnClosed;
+    public readonly NodeValueOutput<bool> isOpened;
+
+    public readonly SyncRef<INodeOperation> OnFail;
+    public readonly NodeValueOutput<ImuErrorCode> FailReason;
+
+    public readonly SyncRef<INodeOperation> OnData;
+    public readonly NodeValueOutput<double> fSampleTime;
+    public readonly NodeValueOutput<double3> vAccel;
+    public readonly NodeValueOutput<double3> vGyro;
+    public readonly NodeValueOutput<Imu_OffScaleFlags> unOffScaleFlags;
+
+    public override int NodeImpulseCount => base.NodeImpulseCount + 4;
+
+    public override int NodeOperationCount => base.NodeOperationCount + 2;
+
+    public override int NodeInputCount => base.NodeInputCount + 1;
+
+    public override int NodeOutputCount => base.NodeOutputCount + 6;
+
+    protected override ISyncRef GetImpulseInternal(ref int index)
     {
-        public ObjectArgument<string> DevicePath;
-        public readonly SyncRef<ISyncNodeOperation> OnOpened;
-        public readonly SyncRef<ISyncNodeOperation> OnClosed;
-        public readonly ValueOutput<bool> isOpened;
-        public readonly SyncRef<ISyncNodeOperation> OnFail;
-        public readonly ValueOutput<ErrorCode> FailReason;
-        public readonly SyncRef<ISyncNodeOperation> OnData;
-        public readonly ValueOutput<double> fSampleTime;
-        public readonly ValueOutput<double3> vAccel;
-        public readonly ValueOutput<double3> vGyro;
-        public readonly ValueOutput<Imu_OffScaleFlags> unOffScaleFlags;
+        ISyncRef inter = base.GetImpulseInternal(ref index);
+        if (inter != null) return inter;
 
-        ulong pulBuffer = 0;
-        Thread thread = null;
-
-        public ImuReader()
+        switch (index)
         {
+            case 0: return OnOpened;
+            case 1: return OnClosed;
+            case 2: return OnFail;
+            case 3: return OnData;
         }
 
-        protected override void OnAwake()
+        index -= 4;
+        return null;
+    }
+
+
+    protected override INodeOperation GetOperationInternal(ref int index)
+    {
+        INodeOperation inter = base.GetOperationInternal(ref index);
+        if (inter != null) return inter;
+
+        switch (index)
         {
-            isOpened.Value = false;
+            case 0: return Open;
+            case 1: return Close;
         }
 
-        [ImpulseTarget]
-        public void Open()
+        index -= 2;
+        return null;
+    }
+
+    protected override ISyncRef GetInputInternal(ref int index)
+    {
+        ISyncRef inter = base.GetInputInternal(ref index);
+        if (inter != null) return inter;
+
+        switch (index)
         {
-            string path = DevicePath.Evaluate();
-            if (string.IsNullOrEmpty(path))
-            {
-                Fail(ErrorCode.PathIsNullOrEmpty);
-                return;
-            }
-            if (OpenVR.IOBuffer == null)
-            {
-                Fail(ErrorCode.OpenVrNotFound);
-                return;
-            }
-            if (pulBuffer == 0)
-            {
-                try
-                {
-                    EIOBufferError errorcode;
-                    unsafe
-                    {
-                        errorcode = OpenVR.IOBuffer.Open(path, EIOBufferMode.Read, (uint)sizeof(ImuSample_t), 0, ref pulBuffer);
-                    }
-                    if (errorcode != EIOBufferError.IOBuffer_Success)
-                    {
-                        Fail((ErrorCode)errorcode);
-                        return;
-                    }
-                    thread = new Thread(readLoop);
-                    thread.Start();
-                }
-                catch (Exception e)
-                {
-                    UniLog.Log(e);
-                    Fail(ErrorCode.UnknownException);
-                    return;
-                }
-                isOpened.Value = true;
-                OnOpened.Trigger();
-            }
-            else
-            {
-                Fail(ErrorCode.AlreadyOpened);
-            }
+            case 0: return DevicePath;
         }
 
-        [ImpulseTarget]
-        public void Close()
+        index -= 1;
+        return null;
+    }
+
+    protected override INodeOutput GetOutputInternal(ref int index)
+    {
+        INodeOutput inter = base.GetOutputInternal(ref index);
+        if (inter != null) return inter;
+
+        switch (index)
         {
-            if (pulBuffer == 0)
-            {
-                Fail(ErrorCode.AlreadyClosed);
-                return;
-            }
-            var error = OpenVR.IOBuffer.Close(pulBuffer);
-            if (error != EIOBufferError.IOBuffer_Success)
-            {
-                Fail((ErrorCode)error);
-                return;
-            }
-            try
-            {
-                thread.Abort();
-            }
-            catch (Exception e)
-            {
-                UniLog.Log(e);
-                Fail(ErrorCode.UnknownException);
-                return;
-            }
-            thread = null;
-            pulBuffer = 0;
-            isOpened.Value = false;
-            OnClosed.Trigger();
+            case 0: return isOpened;
+            case 1: return FailReason;
+            case 2: return fSampleTime;
+            case 3: return vAccel;
+            case 4: return vGyro;
+            case 5: return unOffScaleFlags;
+        }
+        index -= 6;
+        return null;
+    }
+
+    public override Type NodeType => typeof(Nodes.ImuReader);
+
+    public Nodes.ImuReader TypedNodeInstance { get; private set; }
+
+    public override INode NodeInstance => TypedNodeInstance;
+
+    public override N Instantiate<N>()
+    {
+        if (TypedNodeInstance != null)
+        {
+            throw new InvalidOperationException("Node has already been instantiated");
         }
 
-        void readLoop()
-        {
-            EIOBufferError failReason = EIOBufferError.IOBuffer_Success;
-            const uint arraySize = 10;
-            ImuSample_t[] samples = new ImuSample_t[arraySize];
-            try
-            {
-                while (true)
-                {
-                    uint punRead = new();
-                    unsafe
-                    {
-                        fixed (ImuSample_t* pSamples = samples)
-                        {
-                            failReason = OpenVR.IOBuffer.Read(pulBuffer, (IntPtr)pSamples, (uint)sizeof(ImuSample_t) * arraySize, ref punRead);
-                        }
-                    }
-                    if (failReason != EIOBufferError.IOBuffer_Success)
-                    {
-                        throw new Exception("read retuned: " + failReason.ToString());
-                    }
-                    int unreadSize = new();
-                    unsafe
-                    {
-                        unreadSize = (int)punRead / sizeof(ImuSample_t);
-                    }
-                    for (int i = 0; i < unreadSize; i++)
-                    {
-                        var sample = samples[i];
-                        World.RunSynchronously(() =>
-                        {
-                            fSampleTime.Value = sample.fSampleTime;
-                            vAccel.Value = Converter.HmdVector3ToDobble3(sample.vAccel);
-                            vGyro.Value = Converter.HmdVector3ToDobble3(sample.vGyro);
-                            unOffScaleFlags.Value = (Imu_OffScaleFlags)sample.unOffScaleFlags;
+        return (TypedNodeInstance = new Nodes.ImuReader()) as N;
+    }
 
-                            OnData.Trigger();
+    protected override void AssociateInstanceInternal(INode node)
+    {
+        TypedNodeInstance = (Nodes.ImuReader)node;
+    }
 
-                            fSampleTime.Value = 0;
-                            vAccel.Value = double3.Zero;
-                            vGyro.Value = double3.Zero;
-                            unOffScaleFlags.Value = 0;
-                        });
-                    }
-                    if (unreadSize == 0) Thread.Sleep(10);
-                }
-            }
-            catch (Exception e)
-            {
-                UniLog.Log(e);
-
-                thread = null;
-                World.RunSynchronously(() =>
-                {
-                    isOpened.Value = false;
-                    Fail(failReason == EIOBufferError.IOBuffer_Success ? ErrorCode.UnknownException : (ErrorCode)failReason);
-                });
-                OpenVR.IOBuffer.Close(pulBuffer);
-                pulBuffer = 0;
-            }
-        }
-
-        void IDisposable.Dispose()
-        {
-            if (thread != null)
-            {
-                thread.Abort();
-                thread = null;
-            }
-            if (pulBuffer != 0)
-            {
-                OpenVR.IOBuffer.Close(pulBuffer);
-            }
-        }
-
-        void Fail(ErrorCode error)
-        {
-            FailReason.Value = error;
-            OnFail.Trigger();
-            FailReason.Value = ErrorCode.None;
-        }
-
-        public enum ErrorCode
-        {
-            None = 0, //IOBuffer_Success = 0,
-            AlreadyOpened,
-            AlreadyClosed,
-            UnknownException,
-            PathIsNullOrEmpty,
-            OpenVrNotFound,
-            IOBuffer_OperationFailed = 100,
-            IOBuffer_InvalidHandle = 101,
-            IOBuffer_InvalidArgument = 102,
-            IOBuffer_PathExists = 103,
-            IOBuffer_PathDoesNotExist = 104,
-            IOBuffer_Permission = 105
-        }
+    public override void ClearInstance()
+    {
+        TypedNodeInstance = null;
     }
 }
-*/

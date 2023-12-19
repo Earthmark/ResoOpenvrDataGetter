@@ -1,9 +1,5 @@
-﻿using ProtoFlux.Core;
+﻿namespace OpenvrDataGetter.Nodes;
 
-namespace OpenvrDataGetter.Nodes;
-
-[NodeCategory("Add-Ons.OpenvrDataGetter")]
-[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyArrayBool")]
 public class DevicePropertyArrayBool : DevicePropertyArrayBase<byte, BoolArrayDeviceProperty, bool>
 {
     protected override bool Reader(byte[] apiVal, uint arrindex)

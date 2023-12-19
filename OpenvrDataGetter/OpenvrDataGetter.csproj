@@ -8,32 +8,34 @@
     <CopyToMods Condition="'$(CopyToMods)'==''">true</CopyToMods>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <ResonitePath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\</ResonitePath>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FrooxEngine">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\FrooxEngine.dll</HintPath>
+    <Reference Include="Elements.Core">
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\Elements.Core.dll</HintPath>
     </Reference>
-    <Reference Include="BaseX">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\Elements.Core.dll</HintPath>
+    <Reference Include="FrooxEngine">
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\FrooxEngine.dll</HintPath>
     </Reference>
     <Reference Include="SteamVR">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\SteamVR.dll</HintPath>
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\SteamVR.dll</HintPath>
     </Reference>
     <Reference Include="ProtoFlux.Core">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\ProtoFlux.Core.dll</HintPath>
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\ProtoFlux.Core.dll</HintPath>
     </Reference>
     <Reference Include="ProtoFlux.Nodes.Core">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\ProtoFlux.Nodes.Core.dll</HintPath>
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\ProtoFlux.Nodes.Core.dll</HintPath>
     </Reference>
     <Reference Include="ProtoFluxBindings">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\ProtoFluxBindings.dll</HintPath>
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\ProtoFluxBindings.dll</HintPath>
     </Reference>
     <Reference Include="ProtoFlux.Nodes.FrooxEngine">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Resonite\Resonite_Data\Managed\ProtoFlux.Nodes.FrooxEngine.dll</HintPath>
+      <HintPath>$(ResonitePath)Resonite_Data\Managed\ProtoFlux.Nodes.FrooxEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetDir)\$(TargetName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Resonite\Libraries\&quot;" />
+    <Exec Command="copy &quot;$(TargetDir)\$(TargetName).dll&quot; &quot;$(ResonitePath)Libraries\&quot;" />
   </Target>
 </Project>

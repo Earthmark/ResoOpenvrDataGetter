@@ -1,17 +1,14 @@
-﻿using ProtoFlux.Core;
-using ProtoFlux.Runtimes.Execution;
+﻿using ProtoFlux.Runtimes.Execution;
 using Valve.VR;
 
 namespace OpenvrDataGetter.Nodes;
 
-[NodeCategory("Add-Ons.OpenvrDataGetter")]
-[NodeOverload("Add-Ons.OpenvrDataGetter.DevicePropertyFloat")]
 public class DevicePropertyFloat : DeviceProperty<float, FloatDeviceProperty>
 {
     protected override float Compute(ExecutionContext context)
     {
-        uint index = IndexCompute(context);
-        FloatDeviceProperty prop = PropCompute(context);
+        uint index = Index.Evaluate(context);
+        FloatDeviceProperty prop = Prop.Evaluate(context);
         ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
         return OpenVR.System.GetFloatTrackedDeviceProperty(index, (ETrackedDeviceProperty)prop, ref error);
     }

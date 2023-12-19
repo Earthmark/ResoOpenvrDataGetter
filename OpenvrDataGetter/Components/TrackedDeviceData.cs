@@ -1,21 +1,14 @@
 ﻿using FrooxEngine;
 using FrooxEngine.ProtoFlux;
-using ProtoFlux.Runtimes.Execution;
-using System;
+using ProtoFlux.Core;
 
 namespace OpenvrDataGetter.Components;
 
-public abstract class TrackedDeviceData<T> : FrooxEngine.ProtoFlux.Runtimes.Execution.ValueFunctionNode<ExecutionContext, T> where T : unmanaged
+public abstract class TrackedDeviceData<T, TNode> : OVRValueFunctionNode<T, TNode> where T : unmanaged where TNode : class, INode, new()
 {
-    public SyncRef<INodeValueOutput<uint>> Index;
+    public readonly SyncRef<INodeValueOutput<uint>> Index;
 
     public override int NodeInputCount => base.NodeInputCount + 1;
-
-    protected override void InitializeSyncMembers()
-    {
-        base.InitializeSyncMembers();
-        Index = new SyncRef<INodeValueOutput<uint>>();
-    }
 
     protected override ISyncRef GetInputInternal(ref int index)
     {
@@ -33,17 +26,5 @@ public abstract class TrackedDeviceData<T> : FrooxEngine.ProtoFlux.Runtimes.Exec
                 index -= 1;
                 return null;
         }
-    }
-
-    public override ISyncMember GetSyncMember(int index)
-    {
-        return index switch
-        {
-            0 => persistent,
-            1 => updateOrder,
-            2 => EnabledField,
-            3 => Index,
-            _ => throw new ArgumentOutOfRangeException(),
-        };
     }
 }
