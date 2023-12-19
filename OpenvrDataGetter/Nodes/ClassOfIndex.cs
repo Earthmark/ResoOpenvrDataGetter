@@ -7,7 +7,6 @@ namespace OpenvrDataGetter.Nodes;
 public class ClassOfIndex : ValueFunctionNode<ExecutionContext, ETrackedDeviceClass>
 {
     public ValueInput<uint> Index;
-    public ValueInput<ETrackedDeviceClass> Prop;
 
     protected override ETrackedDeviceClass Compute(ExecutionContext context)
     {

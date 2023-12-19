@@ -7,7 +7,7 @@ namespace OpenvrDataGetter.Components;
 
 public abstract class DevicePropertyArrayBase<T, P, R, TNode> : DeviceProperty<R, P, TNode> where R : unmanaged where T : unmanaged where P : unmanaged, Enum where TNode : class, INode, new()
 {
-    public SyncRef<INodeValueOutput<uint>> ArrIndex;
+    public readonly SyncRef<INodeValueOutput<uint>> ArrIndex;
 
     public override int NodeInputCount => base.NodeInputCount + 1;
 

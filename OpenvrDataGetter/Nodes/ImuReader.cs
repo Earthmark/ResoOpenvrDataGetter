@@ -19,11 +19,9 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
 
     public Continuation OnOpened;
     public Continuation OnClosed;
-    [ContinuouslyChanging]
     public readonly ValueOutput<bool> isOpened;
 
     public Call OnFail;
-    [ContinuouslyChanging]
     public readonly ValueOutput<ImuErrorCode> FailReason;
 
     public Call OnData;
@@ -44,6 +42,17 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
         unOffScaleFlags = new ValueOutput<Imu_OffScaleFlags>(this);
     }
 
+    protected override void ComputeOutputs(ExecContext c)
+    {
+        isOpened.Write(thread != null, c);
+        FailReason.Write(failReason, c);
+        fSampleTime.Write(0.0, c);
+        vAccel.Write(new(), c);
+        vGyro.Write(new(), c);
+        unOffScaleFlags.Write(new(), c);
+    }
+
+    ImuErrorCode failReason = ImuErrorCode.None;
     ulong pulBuffer = 0;
     Thread thread = null;
 
@@ -195,6 +204,7 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
 
     private IOperation Fail(ImuErrorCode error, ExecContext c)
     {
+        failReason = error;
         FailReason.Write(error, c);
         return OnFail.Target;
     }

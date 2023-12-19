@@ -5,9 +5,10 @@ using Valve.VR;
 namespace OpenvrDataGetter.Components;
 
 [Category("ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons")]
-public class IndexOfRole : OVRValueFunctionNode<int, Nodes.IndexOfRole>
+public class IndexOfRole : OVRValueFunctionNode<uint, Nodes.IndexOfRole>
 {
-    public SyncRef<INodeValueOutput<ETrackedControllerRole>> Role;
+    [DefaultValue(ETrackedControllerRole.Invalid)]
+    public readonly SyncRef<INodeValueOutput<ETrackedControllerRole>> Role;
 
     public override int NodeInputCount => base.NodeInputCount + 1;
 
