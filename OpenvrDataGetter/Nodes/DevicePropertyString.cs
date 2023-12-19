@@ -15,13 +15,14 @@ public class DevicePropertyString : ObjectFunctionNode<ExecutionContext, string>
         uint index = Index.Evaluate(context);
         ETrackedDeviceProperty property = (ETrackedDeviceProperty)Prop.Evaluate(context);
         ETrackedPropertyError pError = ETrackedPropertyError.TrackedProp_Success;
-        StringBuilder stringBuilder = new(64);
-        uint stringTrackedDeviceProperty = OpenVR.System.GetStringTrackedDeviceProperty(index, property, null, 0u, ref pError);
+
+        uint stringTrackedDeviceProperty = OpenVR.System?.GetStringTrackedDeviceProperty(index, property, null, 0u, ref pError) ?? 0;
         if (stringTrackedDeviceProperty > 1)
         {
-            stringBuilder = new StringBuilder((int)stringTrackedDeviceProperty);
+            var stringBuilder = new StringBuilder((int)stringTrackedDeviceProperty);
             OpenVR.System.GetStringTrackedDeviceProperty(index, property, stringBuilder, stringTrackedDeviceProperty, ref pError);
+            return stringBuilder.ToString();
         }
-        return stringBuilder.ToString();
+        return "";
     }
 }

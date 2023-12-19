@@ -1,10 +1,9 @@
 ﻿using Valve.VR;
 
-namespace OpenvrDataGetter
+namespace OpenvrDataGetter;
+
+public enum FloatArrayDeviceProperty
 {
-    public enum FloatArrayDeviceProperty
-    {
-        Prop_CameraDistortionCoefficients = ETrackedDeviceProperty.Prop_CameraDistortionCoefficients_Float_Array,
-        Prop_DisplayAvailableFrameRates = ETrackedDeviceProperty.Prop_DisplayAvailableFrameRates_Float_Array
-    }
+    Prop_CameraDistortionCoefficients = ETrackedDeviceProperty.Prop_CameraDistortionCoefficients_Float_Array,
+    Prop_DisplayAvailableFrameRates = ETrackedDeviceProperty.Prop_DisplayAvailableFrameRates_Float_Array
 }

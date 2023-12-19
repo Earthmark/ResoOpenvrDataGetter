@@ -10,6 +10,6 @@ public class DevicePropertyUlong : DeviceProperty<ulong, UlongDeviceProperty>
         uint index = Index.Evaluate(context);
         ETrackedDeviceProperty prop = (ETrackedDeviceProperty)Prop.Evaluate(context);
         ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-        return OpenVR.System.GetUint64TrackedDeviceProperty(index, prop, ref error);
+        return OpenVR.System?.GetUint64TrackedDeviceProperty(index, prop, ref error) ?? uint.MaxValue;
     }
 }

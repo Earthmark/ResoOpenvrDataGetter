@@ -1,9 +1,8 @@
 ﻿using Valve.VR;
 
-namespace OpenvrDataGetter
+namespace OpenvrDataGetter;
+
+public enum IntArrayDeviceProperty
 {
-    public enum IntArrayDeviceProperty
-    {
-        Prop_CameraDistortionFunction = ETrackedDeviceProperty.Prop_CameraDistortionFunction_Int32_Array
-    }
+    Prop_CameraDistortionFunction = ETrackedDeviceProperty.Prop_CameraDistortionFunction_Int32_Array
 }

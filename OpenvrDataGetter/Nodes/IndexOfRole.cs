@@ -11,6 +11,6 @@ public class IndexOfRole : ValueFunctionNode<ExecutionContext, uint>
     protected override uint Compute(ExecutionContext context)
     {
         var role = Role.Evaluate(context);
-        return OpenVR.System.GetTrackedDeviceIndexForControllerRole(role);
+        return OpenVR.System?.GetTrackedDeviceIndexForControllerRole(role) ?? uint.MaxValue;
     }
 }

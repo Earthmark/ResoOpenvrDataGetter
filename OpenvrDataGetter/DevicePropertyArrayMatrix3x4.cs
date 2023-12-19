@@ -1,9 +1,8 @@
 ﻿using Valve.VR;
 
-namespace OpenvrDataGetter
+namespace OpenvrDataGetter;
+
+public enum Matrix3x4ArrayDeviceProperty
 {
-    public enum Matrix3x4ArrayDeviceProperty
-    {
-        Prop_CameraToHeadTransforms = ETrackedDeviceProperty.Prop_CameraToHeadTransforms_Matrix34_Array
-    }
+    Prop_CameraToHeadTransforms = ETrackedDeviceProperty.Prop_CameraToHeadTransforms_Matrix34_Array
 }

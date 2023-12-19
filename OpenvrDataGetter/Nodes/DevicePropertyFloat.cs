@@ -10,6 +10,6 @@ public class DevicePropertyFloat : DeviceProperty<float, FloatDeviceProperty>
         uint index = Index.Evaluate(context);
         FloatDeviceProperty prop = Prop.Evaluate(context);
         ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-        return OpenVR.System.GetFloatTrackedDeviceProperty(index, (ETrackedDeviceProperty)prop, ref error);
+        return OpenVR.System?.GetFloatTrackedDeviceProperty(index, (ETrackedDeviceProperty)prop, ref error) ?? 0.0f;
     }
 }

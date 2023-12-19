@@ -11,6 +11,6 @@ public class ClassOfIndex : ValueFunctionNode<ExecutionContext, ETrackedDeviceCl
     protected override ETrackedDeviceClass Compute(ExecutionContext context)
     {
         uint index = Index.Evaluate(context);
-        return OpenVR.System.GetTrackedDeviceClass(index);
+        return OpenVR.System?.GetTrackedDeviceClass(index) ?? ETrackedDeviceClass.Invalid;
     }
 }

@@ -8,6 +8,6 @@ public class RoleOfIndex : TrackedDeviceData<ETrackedControllerRole>
     protected override ETrackedControllerRole Compute(ExecutionContext context)
     {
         uint index = Index.Evaluate(context);
-        return OpenVR.System.GetControllerRoleForTrackedDeviceIndex(index);
+        return OpenVR.System?.GetControllerRoleForTrackedDeviceIndex(index) ?? ETrackedControllerRole.Invalid;
     }
 }

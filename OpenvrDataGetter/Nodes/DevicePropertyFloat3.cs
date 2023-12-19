@@ -16,7 +16,7 @@ public class DevicePropertyFloat3 : DeviceProperty<float3, Float3DeviceProperty>
         {
             fixed (float3* pFloat3 = Float3)
             {
-                OpenVR.System.GetArrayTrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), 0, (IntPtr)pFloat3, (uint)sizeof(float3), ref error);
+                OpenVR.System?.GetArrayTrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), 0, (IntPtr)pFloat3, (uint)sizeof(float3), ref error);
             }
         }
         return Float3[0];

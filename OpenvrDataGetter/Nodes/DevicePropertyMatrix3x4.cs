@@ -10,6 +10,6 @@ public class DevicePropertyMatrix3x4 : DeviceProperty<float4x4, Matrix3x4DeviceP
     {
         uint index = Index.Evaluate(context);
         ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-        return Converter.HmdMatrix34ToFloat4x4(OpenVR.System.GetMatrix34TrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), ref error));
+        return Converter.HmdMatrix34ToFloat4x4(OpenVR.System?.GetMatrix34TrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), ref error) ?? new());
     }
 }

@@ -8,6 +8,6 @@ public class ActivityLevelOfIndexNode : TrackedDeviceData<EDeviceActivityLevel>
     protected override EDeviceActivityLevel Compute(ExecutionContext context)
     {
         uint index = Index.Evaluate(context);
-        return OpenVR.System.GetTrackedDeviceActivityLevel(index);
+        return OpenVR.System?.GetTrackedDeviceActivityLevel(index) ?? EDeviceActivityLevel.k_EDeviceActivityLevel_Unknown;
     }
 }

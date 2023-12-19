@@ -9,6 +9,6 @@ public class DevicePropertyInt : DeviceProperty<int, IntDeviceProperty>
     {
         uint index = Index.Evaluate(context);
         ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
-        return OpenVR.System.GetInt32TrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), ref error);
+        return OpenVR.System?.GetInt32TrackedDeviceProperty(index, (ETrackedDeviceProperty)Prop.Evaluate(context), ref error) ?? 0;
     }
 }

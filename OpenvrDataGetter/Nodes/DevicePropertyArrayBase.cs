@@ -32,10 +32,9 @@ public abstract class DevicePropertyArrayBase<T, P, R> : DeviceProperty<R, P> wh
         {
             fixed (T* ptr = arr)
             {
-                OpenVR.System.GetArrayTrackedDeviceProperty(devindex, prop, 0, (IntPtr)ptr, (uint)memsize, ref error);
+                OpenVR.System?.GetArrayTrackedDeviceProperty(devindex, prop, 0, (IntPtr)ptr, (uint)memsize, ref error);
             }
         }
         return Reader(arr, arrindex);
-
     }
 }
