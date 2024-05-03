@@ -12,16 +12,16 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
 {
     public readonly ObjectInput<string> DevicePath;
 
-    [PossibleContinuations("OnOpened", "OnFail")]
     public readonly Operation Open;
-    [PossibleContinuations("OnClosed", "OnFail")]
     public readonly Operation Close;
 
     public Continuation OnOpened;
     public Continuation OnClosed;
+    [ContinuouslyChanging]
     public readonly ValueOutput<bool> isOpened;
 
     public Call OnFail;
+    [ContinuouslyChanging]
     public readonly ValueOutput<ImuErrorCode> FailReason;
 
     public Call OnData;
@@ -42,23 +42,16 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
         unOffScaleFlags = new ValueOutput<Imu_OffScaleFlags>(this);
     }
 
-    protected override void ComputeOutputs(ExecContext c)
-    {
-        isOpened.Write(thread != null, c);
-        FailReason.Write(failReason, c);
-        fSampleTime.Write(0.0, c);
-        vAccel.Write(new(), c);
-        vGyro.Write(new(), c);
-        unOffScaleFlags.Write(new(), c);
-    }
-
-    ImuErrorCode failReason = ImuErrorCode.None;
+    volatile ImuErrorCode failReason = ImuErrorCode.None;
+    volatile Thread thread = null;
     ulong pulBuffer = 0;
-    Thread thread = null;
 
     public IOperation DoOpen(ExecContext c)
     {
         string path = DevicePath.Evaluate(c);
+        failReason = ImuErrorCode.None;
+
+        UniLog.Log($"Opening IMU connection to '{path}'");
         if (string.IsNullOrEmpty(path))
         {
             return Fail(ImuErrorCode.PathIsNullOrEmpty, c);
@@ -80,6 +73,7 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
                 {
                     return Fail((ImuErrorCode)errorcode, c);
                 }
+                UniLog.Log($"IMU connection to '{path}' open");
                 NodeContextPath nodePath = c.CaptureContextPath();
                 c.GetEventDispatcher(out var dispatcher);
                 thread = new Thread(() => readLoop(nodePath, dispatcher));
@@ -139,6 +133,7 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
 
     void readLoop(NodeContextPath path, ExecutionEventDispatcher<ExecContext> c)
     {
+        UniLog.Log($"IMU read thread starting...");
         EIOBufferError failReason = EIOBufferError.IOBuffer_Success;
         const uint arraySize = 10;
         ImuSample_t[] samples = new ImuSample_t[arraySize];
@@ -165,7 +160,8 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
                 }
                 for (int i = 0; i < unreadSize; i++)
                 {
-                    c.ScheduleEvent(path, HandleImuData, samples[i]);
+                    var s = samples[i];
+                    c.ScheduleEvent(path, HandleImuData, s);
                 }
                 if (unreadSize == 0)
                 {
@@ -182,7 +178,6 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
             {
                 isOpened.Write(false, c);
                 Fail(failReason == EIOBufferError.IOBuffer_Success ? ImuErrorCode.UnknownException : (ImuErrorCode)failReason, c);
-                OnFail.Execute(c);
             });
             OpenVR.IOBuffer.Close(pulBuffer);
             pulBuffer = 0;
@@ -204,8 +199,10 @@ public class ImuReader : VoidNode<ExecContext>, IDisposable
 
     private IOperation Fail(ImuErrorCode error, ExecContext c)
     {
+        UniLog.Log($"IMU read error: {error}");
         failReason = error;
         FailReason.Write(error, c);
-        return OnFail.Target;
+        OnFail.Execute(c);
+        return null;
     }
 }
