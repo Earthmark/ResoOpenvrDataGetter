@@ -11,19 +11,19 @@ namespace OpenvrDataGetter.Components;
 [Category("ProtoFlux/Runtimes/Execution/Nodes/Ad-Ons")]
 public class ImuReader : VoidNode<FrooxEngineContext>
 {
-    public readonly SyncRef<INodeObjectOutput<string>> DevicePath;
-
     public readonly SyncNodeOperation Open;
     public readonly SyncNodeOperation Close;
 
+    public readonly SyncRef<INodeObjectOutput<string>> DevicePath;
+
     public readonly SyncRef<INodeOperation> OnOpened;
     public readonly SyncRef<INodeOperation> OnClosed;
-    public readonly NodeValueOutput<bool> isOpened;
-
     public readonly SyncRef<INodeOperation> OnFail;
+    public readonly SyncRef<INodeOperation> OnData;
+
+    public readonly NodeValueOutput<bool> isOpened;
     public readonly NodeValueOutput<ImuErrorCode> FailReason;
 
-    public readonly SyncRef<INodeOperation> OnData;
     public readonly NodeValueOutput<double> fSampleTime;
     public readonly NodeValueOutput<double3> vAccel;
     public readonly NodeValueOutput<double3> vGyro;
