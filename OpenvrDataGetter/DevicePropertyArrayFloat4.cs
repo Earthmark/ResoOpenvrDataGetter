@@ -1,14 +1,8 @@
-﻿using BaseX;
-using Valve.VR;
+﻿using Valve.VR;
 
-namespace OpenvrDataGetter
+namespace OpenvrDataGetter;
+
+public enum Float4ArrayDeviceProperty
 {
-    public class DevicePropertyArrayFloat4 : DevicePropertyArray<float4, Float4ArrayDeviceProperty>
-    {
-    }
-
-    public enum Float4ArrayDeviceProperty
-    {
-        Prop_CameraWhiteBalance = ETrackedDeviceProperty.Prop_CameraWhiteBalance_Vector4_Array
-    }
+    Prop_CameraWhiteBalance = ETrackedDeviceProperty.Prop_CameraWhiteBalance_Vector4_Array
 }
